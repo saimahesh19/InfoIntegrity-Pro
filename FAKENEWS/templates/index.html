@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fake News Detection with Translation</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Fake News Detection with Translation</h1>
+        <!-- Dark mode toggle button -->
+        <button id="dark-mode-toggle">Dark Mode</button>
+        <form id="fake-news-form">
+            <label for="website_url">Enter Website URL:</label>
+            <input type="text" id="website_url" name="website_url" required>
+            <button type="button" id="detect-button">Translate and Detect</button>
+        </form>
+        <div id="result-container">
+            <!-- The detection result will be displayed here using JavaScript -->
+        </div>
+    </div>
+
+    <!-- Create a container for the 3D spinning cubes -->
+    <div id="threejs-container"></div>
+
+    <script>
+        // JavaScript to handle dark mode toggle
+        const darkModeToggle = document.getElementById('dark-mode-toggle');
+        const container = document.querySelector('.container');
+
+        darkModeToggle.addEventListener('click', () => {
+            container.classList.toggle('dark-mode');
+        });
+    </script>
+
+    <script>
+        // JavaScript to handle form submission and update result dynamically
+        document.getElementById('detect-button').addEventListener('click', function() {
+            var websiteUrl = document.getElementById('website_url').value;
+            var resultContainer = document.getElementById('result-container');
+
+            fetch('/detect_fake_news', {
+                method: 'POST',
+                body: new URLSearchParams({ 'website_url': websiteUrl }),
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+            })
+            .then(function(response) {
+                return response.json();
+            })
+            .then(function(data) {
+                resultContainer.innerHTML = '<p>Detected Language: ' + data.detected_lang + '</p>' +
+                                      '<p>Original Text (' + data.detected_lang + '): ' + data.original_text + '</p>' +
+                                      '<p>Translated Headline (English): ' + data.translated_headline + '</p>' +
+                                      '<p>Classification: ' + data.classification + '</p>';
+            })
+            .catch(function(error) {
+                resultContainer.innerHTML = '<p>Error: ' + error.message + '</p>';
+            });
+        });
+    </script>
+
+    <script>
+        // JavaScript to create 3D spinning cubes
+        function createCubes(container) {
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer();
+            renderer.setSize(container.clientWidth, container.clientHeight);
+            container.appendChild(renderer.domElement);
+
+            // Create and position cubes in each corner
+            createCube(scene, -12, -12, 0);
+            createCube(scene, 12, -12, 0);
+            createCube(scene, -12, 12, 0);
+            createCube(scene, 12, 12, 0);
+
+            camera.position.z = 20;
+
+            const animate = () => {
+                requestAnimationFrame(animate);
+                scene.rotation.x += 0.009;
+                scene.rotation.y += 0.009;
+                renderer.render(scene, camera);
+            };
+
+            animate();
+        }
+
+        function createCube(scene, x, y, z) {
+            const cubeGeometry = new THREE.BoxGeometry();
+            const cubeMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+            const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+            cube.position.set(x, y, z);
+            scene.add(cube);
+        }
+
+        createCubes(document.getElementById('threejs-container'));
+    </script>
+</body>
+</html>
