@@ -1,104 +1,95 @@
-# Smart Mirror with Emotion Detection & Music Recommendation
+# Fake News Detection System
 
-A sophisticated IoT-based smart mirror application that detects user emotions through facial recognition and recommends personalized music based on the detected mood. Built with Flask backend and an interactive 3D frontend using Three.js.
+An intelligent web application that analyzes news headlines from any website URL and determines their authenticity using machine learning. The system supports multi-language detection and automatically translates non-English content for analysis.
 
-## 👨‍💻 Developer
+## 🎯 Overview
 
-**MARPU SAI MAHESH**
-- 📧 Email: chintusaimaheshmarpu@gmail.com
-- 📱 Phone: +91 9502342564
-- 📍 Location: Andhra Pradesh, India
-- 💼 LinkedIn: [linkedin.com/in/marpumahesh](https://www.linkedin.com/in/marpumahesh/)
-- 🐙 GitHub: [github.com/saimahesh19](https://github.com/saimahesh19)
+This project combines natural language processing, machine learning, and web scraping to combat misinformation by providing real-time fake news detection. Simply input a news article URL, and the system will extract the headline, detect its language, translate it if necessary, and classify it as REAL or FAKE using a trained logistic regression model.
 
-## 🌟 Features
+## ✨ Features
 
-- **Real-time Face Recognition**: Identifies known users from a pre-loaded database of faces
-- **Emotion Detection**: Uses DeepFace AI to analyze facial expressions and detect 7 emotions:
-  - Happy
-  - Sad
-  - Angry
-  - Fear
-  - Surprise
-  - Disgust
-  - Neutral
-- **Personalized Music Recommendations**: Integrates with Spotify API to suggest mood-appropriate music
-- **Multi-language Support**: Music recommendations in 5 languages:
-  - Telugu
-  - Hindi
-  - Tamil
-  - Malayalam
-  - English
-- **Interactive 3D Interface**: Built with Three.js for an immersive user experience
-- **Live Video Feed**: Real-time camera feed with emotion overlay
+- **URL-Based Analysis**: Analyze news articles directly from their web URLs
+- **Multi-Language Support**: Automatically detects and translates headlines in various languages
+- **Machine Learning Classification**: Uses TF-IDF vectorization and Logistic Regression for accurate predictions
+- **Real-Time Processing**: Instant results with detailed analysis breakdown
+- **Clean Modern UI**: Responsive interface built with HTML, CSS, and JavaScript
+- **Headline Extraction**: Intelligent web scraping to extract article headlines
+- **Language Detection**: Automatic language identification using langdetect
 
 ## 🛠️ Technology Stack
 
 ### Backend
 - **Python 3.x**
-- **Flask**: Web framework for API endpoints
-- **OpenCV**: Computer vision and video processing
-- **face_recognition**: Face detection and recognition
-- **DeepFace**: Deep learning-based emotion analysis
-- **Spotipy**: Spotify Web API wrapper
+- **Flask**: Lightweight web framework for API endpoints
+- **scikit-learn**: Machine learning library for model training and prediction
+- **BeautifulSoup4**: HTML parsing and web scraping
+- **googletrans**: Language translation API
+- **langdetect**: Language detection library
+- **pandas**: Data manipulation and analysis
+- **requests**: HTTP library for web scraping
 
 ### Frontend
-- **HTML5**: Structure and markup
-- **CSS3**: Styling and animations
-- **JavaScript (ES6+)**: Interactive functionality
-- **Three.js**: 3D graphics and visualization
+- **HTML5**: Structure and semantic markup
+- **CSS3**: Modern styling and responsive design
+- **JavaScript**: Interactive functionality and AJAX requests
+
+### Machine Learning Pipeline
+- **CountVectorizer**: Text tokenization and feature extraction
+- **TfidfTransformer**: Term frequency-inverse document frequency weighting
+- **Logistic Regression**: Binary classification model
 
 ## 📋 Prerequisites
 
-- Python 3.7 or higher
-- Webcam/Camera device
-- Spotify Developer Account (for API credentials)
-- Known face images for recognition
+```bash
+Python 3.7+
+pip (Python package manager)
+```
 
 ## 🚀 Installation
 
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/saimahesh19/smart-mirror.git
-cd smart-mirror
+git clone https://github.com/yourusername/fake-news-detector.git
+cd fake-news-detector
 ```
 
-### 2. Install Python Dependencies
+### 2. Create Virtual Environment (Recommended)
 
 ```bash
-pip install flask opencv-python face-recognition deepface spotipy
+python -m venv venv
+
+# On Windows
+venv\Scripts\activate
+
+# On macOS/Linux
+source venv/bin/activate
 ```
 
-### 3. Set Up Known Faces
-
-Create a folder for known faces and add images:
+### 3. Install Dependencies
 
 ```bash
-mkdir pics
-# Add .jpg or .png images of known people to the pics folder
-# Name files as: /images/FaceRecognition.jpg
+pip install flask googletrans==4.0.0-rc1 beautifulsoup4 requests pandas scikit-learn langdetect
 ```
 
-### 4. Configure Spotify API
+Or use requirements.txt:
 
-1. Go to [Spotify Developer Dashboard](https://developer.spotify.com/dashboard)
-2. Create a new application
-3. Copy your Client ID and Client Secret
-4. Update the credentials in the Flask app:
-
-```python
-SPOTIFY_CLIENT_ID = 'your_client_id_here'
-SPOTIFY_CLIENT_SECRET = 'your_client_secret_here'
+```bash
+pip install -r requirements.txt
 ```
 
-### 5. Update File Paths
+### 4. Prepare Dataset
 
-Modify the `KNOWN_FACES_FOLDER` path in the Flask app to point to your pics folder:
+Ensure you have the `combined_dataset.csv` file in the project root directory with the following structure:
 
-```python
-KNOWN_FACES_FOLDER = r"path/to/your/pics/folder"
+```csv
+news,label
+"Headline text here",0
+"Another headline",1
 ```
+
+- **Label 0**: REAL news
+- **Label 1**: FAKE news
 
 ## 🎮 Usage
 
@@ -108,153 +99,248 @@ KNOWN_FACES_FOLDER = r"path/to/your/pics/folder"
 python app.py
 ```
 
-The server will start on `http://localhost:5000`
+The application will start on `http://localhost:5000`
 
-### 2. Access the Application
+### 2. Access the Web Interface
 
-Open your web browser and navigate to:
+Open your browser and navigate to:
 ```
 http://localhost:5000
 ```
 
-### 3. Using the Smart Mirror
+### 3. Analyze News Articles
 
-1. **Face Detection**: Position yourself in front of the camera
-2. **Emotion Analysis**: The system analyzes your emotion every 10 seconds
-3. **View Results**: Your name (if recognized) and detected emotion appear on screen
-4. **Music Recommendation**: Select your preferred language and click to play mood-appropriate music
-5. **Spotify Integration**: Music opens automatically in your Spotify app
+1. **Enter URL**: Paste the full URL of a news article
+2. **Submit**: Click the analyze button
+3. **View Results**: See the classification, original headline, detected language, and English translation
 
-## 📁 Project Structure
+## 📊 How It Works
 
+### Step-by-Step Process
+
+1. **URL Input**: User provides a news article URL
+2. **Web Scraping**: BeautifulSoup extracts the headline from the webpage
+3. **Language Detection**: System identifies the headline's language
+4. **Translation**: If not in English, headline is translated using Google Translate
+5. **Feature Extraction**: Text is converted to TF-IDF features
+6. **Classification**: Logistic Regression model predicts REAL or FAKE
+7. **Results Display**: User receives comprehensive analysis
+
+### Machine Learning Model
+
+The system uses a supervised learning pipeline:
+
+```python
+Pipeline([
+    ('vect', CountVectorizer()),      # Convert text to word count vectors
+    ('tfidf', TfidfTransformer()),    # Apply TF-IDF weighting
+    ('clf', LogisticRegression())     # Binary classification
+])
 ```
-smart-mirror/
-│
-├── app.py                 # Flask backend application
-├── templates/
-│   └── index.html        # Frontend HTML with Three.js
-├── static/
-│   ├── css/
-│   │   └── style.css     # Styling
-│   └── js/
-│       └── main.js       # JavaScript logic
-├── pics/                 # Known faces database
-│   ├── /images/Person.jpg
-│   └── /images/Person.jpg
-└── README.md            # Project documentation
-```
 
-## 🎵 Mood-Music Mapping
-
-The application maps emotions to music genres across different languages:
-
-| Emotion | Telugu | Hindi | Tamil | Malayalam | English |
-|---------|--------|-------|-------|-----------|---------|
-| Happy | Joyful Folk | Festive Bollywood | Celebratory Gaana | Cheerful Mappila | Energetic Dance |
-| Sad | Melancholic Melodies | Heartfelt Sufi | Emotional Classical | Reflective Film Songs | Melancholic Ballads |
-| Angry | Mass Beats | Aggressive Bhangra | Powerful Kuthu | Intense Folk | Intense Rock |
-| Fear | Uplifting Devotional | Motivational Qawwali | Inspirational Bhajan | Courageous Classical | Empowering Pop |
-| Surprise | Dynamic Fusion | Eclectic Filmi | Unexpected Carnatic | Vibrant Fusion | Dynamic Jazz |
-| Disgust | Peaceful Carnatic | Serene Ghazals | Melancholic Film Songs | Soulful Sufi | Calming Classical |
-| Neutral | Tranquil Instrumental | Soothing Raag | Relaxing Raga | Peaceful Instrumental | Ambient Chill |
-
-## 🔧 API Endpoints
+## 🌐 API Endpoints
 
 ### GET `/`
 Returns the main application interface
 
-### GET `/video_feed`
-Streams live video feed with emotion detection overlay
+**Response**: HTML page
 
-### GET `/get_emotion`
-Returns the currently detected emotion as JSON
+### POST `/detect_fake_news`
+Analyzes a news article URL for fake news detection
+
+**Request Body** (form-data):
+```
+website_url: "https://example.com/news-article"
+```
+
+**Response** (JSON):
 ```json
 {
-  "emotion": "happy"
+  "detected_lang": "en",
+  "translated_headline": "Breaking News: Major Event Occurs",
+  "original_text": "Breaking News: Major Event Occurs",
+  "classification": "REAL"
 }
 ```
 
-### POST `/play_music`
-Plays music based on detected emotion and selected language
-
-**Request Body:**
+**Error Response**:
 ```json
 {
-  "language": "english"
+  "error": "Error message description"
 }
 ```
+
+## 📁 Project Structure
+
+```
+fake-news-detector/
+│
+├── app.py                      # Main Flask application
+├── combined_dataset.csv        # Training dataset
+├── requirements.txt            # Python dependencies
+│
+├── templates/
+│   └── index.html             # Frontend HTML interface
+│
+├── static/
+│   ├── css/
+│   │   └── style.css          # Styling
+│   ├── js/
+│   │   └── main.js            # JavaScript logic
+│   └── assets/
+│       └── images/            # Images and icons
+│
+└── README.md                  # Project documentation
+```
+
+## 🔍 Supported Languages
+
+The system can detect and translate headlines from multiple languages including:
+- English
+- Spanish
+- French
+- German
+- Italian
+- Portuguese
+- Hindi
+- Chinese
+- Japanese
+- Arabic
+- And many more...
 
 ## 🐛 Troubleshooting
 
-### Camera Not Working
-- Ensure your webcam is properly connected
-- Check camera permissions in your OS settings
-- Try changing the camera index in `cv2.VideoCapture(0)` to `1` or `2`
+### Common Issues
 
-### Face Recognition Issues
-- Ensure images in the pics folder are clear and well-lit
-- Use frontal face photos for best results
-- Check that image filenames don't contain special characters
-
-### Spotify Not Opening
-- Ensure Spotify desktop app is installed
-- Check that your API credentials are correct
-- Verify your internet connection
-
-### DeepFace Installation Issues
+**Issue**: `googletrans` translation errors
 ```bash
-pip install --upgrade deepface
-pip install tf-keras
+# Solution: Install specific version
+pip install googletrans==4.0.0-rc1
 ```
 
-## 🔐 Security Notes
+**Issue**: Website scraping fails
+- **Cause**: Website structure doesn't contain `<h1>` tags
+- **Solution**: Modify `get_headline_from_website()` to match target website's HTML structure
 
-- **Never commit API credentials** to version control
-- Use environment variables for sensitive data:
-  ```python
-  import os
-  SPOTIFY_CLIENT_ID = os.getenv('SPOTIFY_CLIENT_ID')
-  SPOTIFY_CLIENT_SECRET = os.getenv('SPOTIFY_CLIENT_SECRET')
-  ```
-- Implement user authentication for production deployment
-- Use HTTPS in production environments
+**Issue**: Model accuracy is low
+- **Solution**: Retrain with a larger, more diverse dataset
 
-## 🚀 Future Enhancements
+**Issue**: Language detection fails
+```bash
+# Solution: Reinstall langdetect
+pip uninstall langdetect
+pip install langdetect
+```
 
-- [ ] Add user profile management
-- [ ] Implement emotion history tracking
-- [ ] Add more music streaming service integrations
-- [ ] Create mobile application version
-- [ ] Add voice control features
-- [ ] Implement weather and news widgets
-- [ ] Add calendar and reminder features
-- [ ] Support for multiple simultaneous users
+## 📈 Model Performance
 
-## 📄 License
+The model's performance depends on the quality and size of the training dataset. To improve accuracy:
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+1. **Increase Dataset Size**: More training examples lead to better generalization
+2. **Balance Classes**: Ensure equal representation of REAL and FAKE news
+3. **Feature Engineering**: Experiment with n-grams, word embeddings
+4. **Hyperparameter Tuning**: Optimize LogisticRegression parameters
+5. **Cross-Validation**: Use k-fold validation to assess model robustness
+
+## 🔒 Security Considerations
+
+- **Input Validation**: Always validate and sanitize user-provided URLs
+- **Rate Limiting**: Implement rate limiting to prevent abuse
+- **HTTPS**: Use HTTPS in production environments
+- **CORS**: Configure Cross-Origin Resource Sharing appropriately
+- **Error Handling**: Never expose sensitive error details to users
+
+## 🚧 Future Enhancements
+
+- [ ] Add support for full article analysis (not just headlines)
+- [ ] Implement deep learning models (BERT, GPT) for improved accuracy
+- [ ] Create user authentication and history tracking
+- [ ] Add confidence scores for predictions
+- [ ] Implement real-time fact-checking with external APIs
+- [ ] Support for social media post analysis
+- [ ] Browser extension for instant verification
+- [ ] Mobile application development
+- [ ] Multi-source verification and credibility scoring
+- [ ] Export reports as PDF
+
+## 📊 Dataset Information
+
+The model is trained on a combined dataset of news articles labeled as REAL (0) or FAKE (1). For best results:
+
+- **Minimum Dataset Size**: 10,000+ articles
+- **Recommended Format**: CSV with 'news' and 'label' columns
+- **Data Sources**: Kaggle, FakeNewsNet, LIAR dataset
+- **Preprocessing**: Remove duplicates, handle missing values, balance classes
 
 ## 🤝 Contributing
 
-Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](https://github.com/saimahesh19/smart-mirror/issues).
+Contributions are welcome! Please follow these steps:
 
-1. Fork the project
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
 3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-## 📞 Contact
+### Contribution Guidelines
 
-**MARPU SAI MAHESH**
+- Follow PEP 8 style guide for Python code
+- Write clear commit messages
+- Add tests for new features
+- Update documentation as needed
+- Ensure all tests pass before submitting PR
 
-- Email: chintusaimaheshmarpu@gmail.com
-- LinkedIn: [linkedin.com/in/marpumahesh](https://www.linkedin.com/in/marpumahesh/)
-- GitHub: [github.com/saimahesh19](https://github.com/saimahesh19)
-- Phone: +91 9502342564
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- **scikit-learn**: For providing excellent machine learning tools
+- **Flask**: For the lightweight and flexible web framework
+- **BeautifulSoup**: For powerful HTML parsing capabilities
+- **Google Translate**: For multi-language support
+- **Open Source Community**: For inspiration and resources
+
+## 📚 References
+
+- [Fake News Detection using Machine Learning](https://www.kaggle.com/c/fake-news)
+- [TF-IDF Vectorization](https://scikit-learn.org/stable/modules/feature_extraction.html#tfidf-term-weighting)
+- [Logistic Regression](https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression)
+- [BeautifulSoup Documentation](https://www.crummy.com/software/BeautifulSoup/bs4/doc/)
+
+## 📞 Support
+
+For questions, issues, or suggestions:
+
+- **GitHub Issues**: [Create an issue](https://github.com/yourusername/fake-news-detector/issues)
+- **Email**: your.email@example.com
+- **Documentation**: Check the [Wiki](https://github.com/yourusername/fake-news-detector/wiki)
+
+## 📝 Changelog
+
+### Version 1.0.0 (Current)
+- Initial release
+- Basic fake news detection functionality
+- Multi-language support
+- Web scraping capabilities
+- RESTful API endpoints
 
 ---
 
-⭐ If you found this project helpful, please consider giving it a star!
+⭐ **If you find this project helpful, please consider giving it a star!**
 
-**Made with ❤️ by Marpu Sai Mahesh**
+**Made with ❤️ for a more informed world**
+
+## 🎓 Educational Use
+
+This project is ideal for:
+- Machine Learning students learning NLP and classification
+- Web development learners exploring Flask applications
+- Data Science enthusiasts working on real-world problems
+- Researchers studying misinformation detection
+- Developers building content verification systems
+
+---
+
+**Disclaimer**: This tool is designed for educational and research purposes. While it aims to detect fake news, it should not be the sole source for determining news authenticity. Always verify information from multiple credible sources.
